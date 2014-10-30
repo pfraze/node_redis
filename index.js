@@ -40,6 +40,10 @@ function RedisClient(stream, options) {
     console.log('Creating client #' + this.clientNumber)
     var tmperr = new Error()
     console.log(tmperr.stack.slice('Error'.length))
+    var self = this
+    setTimeout(function() {
+        console.log('Redis client #'+self.clientNumber, 'has the following error listeners:', self.listeners('error'))
+    }, 1000)
 
     this.stream = stream;
     this.options = options = options || {};
@@ -201,10 +205,11 @@ RedisClient.prototype.on_error = function (msg) {
     this.connected = false;
     this.ready = false;
 
+    console.log('Redis client #'+this.clientNumber, 'has the following error listeners:', this.listeners('error'))
     try {
         this.emit("error", new Error(message));
     } catch (e) {
-        console.log('There is no error handler on redis client #'+this.clientNumber)
+        console.log('Error emitter resulted in an exception on redis client #'+this.clientNumber)
     }
     // "error" events get turned into exceptions if they aren't listened for.  If the user handled this error
     // then we should try to reconnect.
