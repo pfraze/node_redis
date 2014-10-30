@@ -1,5 +1,7 @@
 /*global Buffer require exports console setTimeout */
 
+console.log('Node Redis PFrazee edition')
+
 var net = require("net"),
     util = require("./lib/util"),
     Queue = require("./lib/queue"),
