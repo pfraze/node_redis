@@ -34,7 +34,13 @@ try {
 
 parsers.push(require("./lib/parser/javascript"));
 
+var numClient = 0;
 function RedisClient(stream, options) {
+    this.clientNumber = (++numClient)
+    console.log('Creating client #' + this.clientNumber)
+    var tmperr = new Error()
+    console.log(tmperr.stack)
+
     this.stream = stream;
     this.options = options = options || {};
 
@@ -195,7 +201,11 @@ RedisClient.prototype.on_error = function (msg) {
     this.connected = false;
     this.ready = false;
 
-    this.emit("error", new Error(message));
+    try {
+        this.emit("error", new Error(message));
+    } catch (e) {
+        console.log('There is no error handler on redis client #'+this.clientNumber)
+    }
     // "error" events get turned into exceptions if they aren't listened for.  If the user handled this error
     // then we should try to reconnect.
     this.connection_gone("error");
