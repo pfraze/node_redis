@@ -39,7 +39,7 @@ function RedisClient(stream, options) {
     this.clientNumber = (++numClient)
     console.log('Creating client #' + this.clientNumber)
     var tmperr = new Error()
-    console.log(tmperr.stack)
+    console.log(tmperr.stack.slice('Error'.length))
 
     this.stream = stream;
     this.options = options = options || {};
